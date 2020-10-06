@@ -1,24 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
+import React,{useState, useEffect} from 'react';
 import './App.css';
 
+import firebase from "./service/firebase"
+import {useDispatch, useSelector} from 'react-redux'
+import HomeLayout from './components/HomeLayout'
+import WorkoutHome from './components/WorkoutHome'
+import {BrowserRouter, Route} from 'react-router-dom'
+import PlansHome from './components/PlansHome'
+import NavB from './components/NavB'
 function App() {
+
+  const db = firebase.firestore()
+
+  const INI = {user : null,
+    is_Logged: false}
+
+const [prof, setProf]= useState(INI)
+const [gID, setGId]= useState(0)
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+    
+    <NavB prof ={prof} setProf={setProf} gId={gID} setGId={setGId}/>
+     <Route exact path='/workout'>
+      <WorkoutHome prof={prof} setProf={setProf} gId={gID} setGId={setGId}/>
+      </Route>
+
+     <Route exact path='/plans'>
+      <PlansHome prof={prof} setProf={setProf} gId={gID} setGId={setGId}/>
+      </Route>
+
+
+     <Route exact path='/'>
+      <HomeLayout prof={prof} setProf={setProf} gId={gID} setGId={setGId}/>
+      </Route>
+
+      
+
+      </BrowserRouter>
+    
     </div>
   );
 }
